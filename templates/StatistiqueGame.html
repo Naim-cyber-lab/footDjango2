@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charsert="UTF-8">
+        <title>Listes des equipes</title>
+
+
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+    </head>
+    <style>
+        .suggestion{
+    background-color: rgb(91, 161, 202);
+    color:white;
+    width:13.5%;
+}
+.suggestion:hover{
+    background-color: rgb(135, 135, 238);
+    width:13.5%;
+}
+
+.caret-up {
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid rgba(0, 0, 0, 0);
+    border-right: 4px solid rgba(0, 0, 0, 0);
+    border-bottom: 4px solid;
+    
+    display: inline-block;
+    margin-left: 2px;
+    vertical-align: middle;
+}
+    </style>
+    <body>
+        
+        <div class="container">
+            <div class="row">
+                <nav class="navbar navbar-default" role="navigation">
+          
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+        
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="/NouveauMatch/">Nouveau Match</a></li>
+                <li><a href="/FeedbackJeux/">Jeux</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Equipes <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <!-- <li><a href="/Equipes/ListesEquipes/">Listes des equipes</a></li> -->
+                    <!-- <li><a href="#">Saison</a></li> -->
+                    <li><a href="/Equipes/JoueursCree/">Joueur</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Statistiques <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">Etat de forme</a></li>
+                      <!-- <li><a href="/StatistiqueGame/">En fonction de "Jeux"</a></li> -->
+                      <!-- <li><a href="#">Assiduité</a></li> -->
+                    </ul>
+                  </li>
+              </ul>
+              
+            </div><!-- /.navbar-collapse -->
+          
+        </nav>
+        
+            </div>
+
+<div class="container">
+        <h3>Statistique</h3>
+        {% if user.is_authenticated %}
+            {% block content %}
+            <form method='POST'>
+                {% csrf_token %}Statistique du joueur :
+<div>
+                    
+                    
+                    <input autocomplete="off" id="searchInput" name="firstName_lastName" placeholder="Prénom et Nom" type="search">
+                    <suggestion id="suggestions"></suggestion>
+                   <!-- on va rajouter une <div class="suggestion"> </div> dans notre code javascript pour mettre nos suggestion -->
+                  </div>
+                    
+                    <!-- <input type="text" name="firstName_lastName" placeholder="Prénom et Nom"><br>                -->
+                    <input type="submit" name="statPlayer" class="btn btn-success"value="VALIDER">
+            </form>
+            <br>
+            
+            
+            <br>
+            {%if score != 0 %}
+            
+
+            <p>Le score global du joueur est {{score}}</p>
+            <p> score scoreGoalKeeperYes : {{scoreGoalKeeperYes}}</p>
+            <p> score scoreGoalSmall : {{scoreGoalSmall}}</p>
+            <p> score scoreTB_free : {{scoreTB_free}}</p>
+            <p> score scoreTB_2 : {{scoreTB_2}}</p>
+            <p> score scoreTB1_3 : {{scoreTB1_3}}</p>
+            <p> score scoreGoalOther : {{scoreGoalOther}}</p>
+            <p> score scoreGoalNone : {{scoreGoalNone}}</p>
+            <p> score scoreGoalEmbut : {{scoreGoalEmbut}}</p>
+            <p> score scoreGoal7 : {{scoreGoal7}}</p>
+            <p> score scoreGoal11 : {{scoreGoal11}}</p>
+            <p> score scoreOtherField : {{scoreOtherField}}</p>
+            <p> score scoreGrassWet : {{scoreGrassWet}}</p>
+            <p> score scoreGrassDry : {{scoreGrassDry}}</p>
+            <p> score scoreStabiliseWet : {{scoreStabiliseWet}}</p>
+            <p> score scoreStabiliseDry : {{scoreStabiliseDry}}</p>
+            <p> score scoreOffLineNo : {{scoreOffLineNo}}</p>
+            <p> score scoreOffLineYes : {{scoreOffLineYes}}</p>
+            <p> score scoreGoalKeeperNo : {{scoreGoalKeeperNo}}</p>
+
+            <button id="displayDetailsButton">Afficher Détails</button>
+            
+            <div id="displayDetails" style="width:0;height:0;opacity:0;">
+              {% for rank,number,idGame,idGameModel in zipRankingNumberIdgameIdgamemodel %}
+                  <div style="border : 1px solid black"> Classement : {{rank}} <br> Nb d'equipes : {{number}}. <br>Caractéristiques:{{idGameModel}}</div><br>
+              {% endfor %}
+              </div>
+            {% endif %}
+
+            {%if score == 0 %}
+            <h2>Statistique Equipe</h2>
+            <form method='POST'>
+              {% csrf_token %}
+              <p>Voici la liste des équipes que vous pouvez entrainer :</p>
+              {% for team in MyTeams %}
+                  <input type="radio"  name="currentTeam" value="{{team.id}}">{{team.teamName}}<br>
+              {% endfor %}
+              <input name="StatTeam" class="btn btn-success" type="submit" value="VALIDER">
+          </form>
+          
+          {% endif %}
+            {% endblock %}
+        {% else %}
+        <p>Vous n'etes pas connécté</p>
+        {% endif %}
+
+
+        
+        
+</body>
+
+<script>
+
+
+
+/* ******************************************************************************************** */
+  const persons = {{persons|safe}};
+
+        $(function(){
+    $(".dropdown").hover(            
+            function() {
+                $('.dropdown-menu', this).stop( true, true ).fadeIn("fast");
+                $(this).toggleClass('open');
+                $('b', this).toggleClass("caret caret-up");                
+            },
+            function() {
+                $('.dropdown-menu', this).stop( true, true ).fadeOut("fast");
+                $(this).toggleClass('open');
+                $('b', this).toggleClass("caret caret-up");                
+            });
+    });
+    
+
+
+
+     /*                                 Now we handle the search bar                                         */
+
+    //  const persons = [
+    //         {name:'daniel', age:37},
+    //         {name:'theo', age:37},
+    //         {name:'dani', age:37},
+    //         {name:'danl', age:37},
+    //         {name:'DANS', age:37}
+    //     ];
+
+    
+
+
+const searchinput = document.querySelector("#searchInput");
+searchinput.addEventListener('keyup', function(){
+    const input = searchinput.value;
+    const result = persons.filter(item => item.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()));
+
+    //A chaque fois qu'on ecrit quelque chose sur la barre de recherche, il faudra mettre nos suggestion a zero et reinitialiser
+    let suggestion = '';
+    if(input == ''){
+        document.getElementById('suggestions').innerHTML = '';
+        // alert("rien n'a été ecris sur");
+    }else{
+        result.forEach(resultItem =>
+        suggestion +=`<div class="suggestion">${resultItem.name}</div>`
+        ) 
+        //pour chaque suggestion on va donc ajouter une class et une div suggestion
+
+        document.getElementById('suggestions').innerHTML = suggestion; //On rajoute dans suggestion <div class="suggestion">...</div>
+    }
+    var elementSelections = document.querySelectorAll('.suggestion');
+elementSelections.forEach(Item => 
+    Item.addEventListener('click', function(){
+        document.querySelector("#searchInput").value = '';
+        document.querySelector("#searchInput").value = Item.innerHTML;
+    }
+    )
+)
+})
+
+function ajoutSuggestion(){
+
+}
+
+
+
+
+document.querySelector("#displayDetailsButton").addEventListener('click',DisplayDetails);
+
+function DisplayDetails(){
+  if(document.querySelector("#displayDetails").style.width != "0px"){
+    document.querySelector("#displayDetails").style.width=0;
+    document.querySelector("#displayDetails").style.height=0;
+    document.querySelector("#displayDetails").style.opacity=0;
+  }
+  else{
+    document.querySelector("#displayDetails").style.width="60%";
+    document.querySelector("#displayDetails").style.height="100px";
+    document.querySelector("#displayDetails").style.opacity=1;
+
+  }
+}
+</script>
+</html>

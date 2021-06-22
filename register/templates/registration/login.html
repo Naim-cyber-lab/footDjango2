@@ -1,0 +1,22 @@
+{% load crispy_forms_tags %}
+
+{% block title %}
+
+{% endblock %}
+<head>
+    
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+
+{% block content %}
+<div class="container">
+    <h2>Login here</h2>
+    <form method='POST'>
+        {% csrf_token %}
+        {{form|crispy}}<br>
+        <button type='submit' class='btn btn-success'>Login</button>
+    </form>
+</div>
+{% endblock %}

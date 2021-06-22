@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charsert="UTF-8">
+        <title>Listes des equipes</title>
+
+
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+    </head>
+    <style>
+
+.caret-up {
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid rgba(0, 0, 0, 0);
+    border-right: 4px solid rgba(0, 0, 0, 0);
+    border-bottom: 4px solid;
+    
+    display: inline-block;
+    margin-left: 2px;
+    vertical-align: middle;
+}
+    </style>
+    <body>
+        <div class="container">
+            <div class="row">
+                <nav class="navbar navbar-default" role="navigation">
+          
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+        
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="/NouveauMatch/">Nouveau Match</a></li>
+                <!-- <li><a href="/FeedbackJeux/">Jeux</a></li> -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jeux<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/FeedbackJeux/">Attente</a></li>
+                      <li><a href="/HistoriqueJeu/">Historique</a></li>
+                    </ul>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Equipes <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <!-- <li><a href="/Equipes/ListesEquipes/">Listes des equipes</a></li> -->
+                    <!-- <li><a href="#">Saison</a></li> -->
+                    <li><a href="/Equipes/JoueursCree/">Statistique Joueur</a></li>
+                    <li><a href="/Equipes/StatGliss/">Statistique Equipes</a></li>
+                    <li><a href="/Equipes/Assiduite/">Assiduite</a></li>
+                    <li><a href="/Equipes/Joueur1/">Statistique Joueur R</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Params<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/Equipes/ListesEquipes/">Choix des equipes</a></li>
+                        <li><a href="/Equipes/ParamEquipe/">Parametre Equipe</a></li>
+                      <!-- <li><a href="#">Etat de forme</a></li> -->
+                      <!-- <li><a href="/StatistiqueGame/">En fonction de "Jeux"</a></li> -->
+                      <!-- <li><a href="#">Assiduité</a></li> -->
+                    </ul>
+                  </li>
+              </ul>
+              
+            </div><!-- /.navbar-collapse -->
+          
+        </nav>
+        
+            </div>
+<div class="container" style="display:inline-flex;">
+    <div style="margin:0 20 0 0;">
+        <h3>FeedbackJeux</h3>
+            {% if user.is_authenticated %}
+                {% block content %}
+                <h4><b>{{searchCara}}</b></h4>
+                    {% for name,score in ZipScoreName %}
+                        <p>{{name}} : {{score}}</p>
+                        
+                    {% endfor %}
+                
+               
+
+    </div>
+    <div style="position:absolute;left: 30%;">
+        <form method='POST'>{% csrf_token %}
+        <select class="form-select" name="searchCara">
+            <option class="btn btn-primary" value="goalKeeperYes">scoreGoalKeeperYes</option>
+            <option  class="btn btn-secondary" value="goalSmall">scoreGoalSmall</option>
+            <option class="btn btn-primary" value="TB_free" >scoreTB_free</option>
+            <option class="btn btn-secondary" value="TB_2" >scoreTB_2</option>
+            <option class="btn btn-primary" value="TB1_3" >scoreTB1_3</option>
+            <option class="btn btn-secondary" value="goalOther">scoreGoalOther</option>
+            <option class="btn btn-primary" value="goalNone" >scoreGoalNone</option>
+            <option class="btn btn-secondary" value="goalEmbut">scoreGoalEmbut</option>
+            <option class="btn btn-primary" value="goal7">scoreGoal7</option>
+            <option class="btn btn-secondary" value="goal11">scoreGoal11</option>
+            <option class="btn btn-primary" value="otherField">scoreOtherField</option>
+            <option class="btn btn-secondary" value="otherField">scoreOtherField</option>
+            <option class="btn btn-primary" value="grassWet" >scoreGrassWet</option>
+            <option  class="btn btn-secondary" value="grassDry">scoreGrassDry</option>
+            <option  class="btn btn-primary" value="stabiliseWet">scoreStabiliseWet</option>
+            <option class="btn btn-secondary" value="stabiliseDry">scoreStabiliseDry</option>
+        </select>
+        <input type="submit" class="btn btn-success" value="Valider">
+        </form>
+    </div>
+</div>
+<div>
+    {% if MultipleChart %}
+        <img src="data:image/png;base64, {{MultipleChart|safe}}"><br>
+    {% endif %}
+</div>
+{% endblock %}
+{% else %}
+<p>Vous n'etes pas connécté</p>
+{% endif %}
+</body>
+
+<script>
+
+    /* ******************************************************************************************** */
+      const persons = {{persons|safe}}
+    
+            $(function(){
+        $(".dropdown").hover(            
+                function() {
+                    $('.dropdown-menu', this).stop( true, true ).fadeIn("fast");
+                    $(this).toggleClass('open');
+                    $('b', this).toggleClass("caret caret-up");                
+                },
+                function() {
+                    $('.dropdown-menu', this).stop( true, true ).fadeOut("fast");
+                    $(this).toggleClass('open');
+                    $('b', this).toggleClass("caret caret-up");                
+                });
+        });
+        
+    
+    
+    
+         /*                                 Now we handle the search bar                                         */
+    
+        //  const persons = [
+        //         {name:'daniel', age:37},
+        //         {name:'theo', age:37},
+        //         {name:'dani', age:37},
+        //         {name:'danl', age:37},
+        //         {name:'DANS', age:37}
+        //     ];
+    
+        
+    
+    
+    const searchinput = document.querySelector("#searchInput");
+    searchinput.addEventListener('keyup', function(){
+        const input = searchinput.value;
+        const result = persons.filter(item => item.name.toLocaleLowerCase().includes(input.toLocaleLowerCase()));
+    
+        //A chaque fois qu'on ecrit quelque chose sur la barre de recherche, il faudra mettre nos suggestion a zero et reinitialiser
+        let suggestion = '';
+        if(input == ''){
+            document.getElementById('suggestions').innerHTML = '';
+            // alert("rien n'a été ecris sur");
+        }else{
+            result.forEach(resultItem =>
+            suggestion +=`<div class="suggestion">${resultItem.name}</div>`
+            ) 
+            //pour chaque suggestion on va donc ajouter une class et une div suggestion
+    
+            document.getElementById('suggestions').innerHTML = suggestion; //On rajoute dans suggestion <div class="suggestion">...</div>
+        }
+        var elementSelections = document.querySelectorAll('.suggestion');
+    elementSelections.forEach(Item => 
+        Item.addEventListener('click', function(){
+            document.querySelector("#searchInput").value = '';
+            document.querySelector("#searchInput").value = Item.innerHTML;
+        }
+        )
+    )
+    })
+    
+    function ajoutSuggestion(){
+    
+    }
+    
+    
+    
+    
+    document.querySelector("#displayDetailsButton").addEventListener('click',DisplayDetails);
+    
+    function DisplayDetails(){
+      if(document.querySelector("#displayDetails").style.width != "0px"){
+        document.querySelector("#displayDetails").style.width=0;
+        document.querySelector("#displayDetails").style.height=0;
+        document.querySelector("#displayDetails").style.opacity=0;
+      }
+      else{
+        document.querySelector("#displayDetails").style.width="60%";
+        document.querySelector("#displayDetails").style.height="100px";
+        document.querySelector("#displayDetails").style.opacity=1;
+    
+      }
+    }
+    </script>
+</html>
+

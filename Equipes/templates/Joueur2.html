@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charsert="UTF-8">
+        <title>Joueur</title>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+    </head>
+
+    <style>
+table, th, td {
+      padding: 10px;
+      border: 1px solid black;
+      border-collapse: collapse;
+      }
+.suggestion{
+    background-color: rgb(91, 161, 202);
+    color:white;
+    width:13.5%;
+}
+.suggestion:hover{
+    background-color: rgb(135, 135, 238);
+    width:13.5%;
+}
+
+.caret-up {
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid rgba(0, 0, 0, 0);
+    border-right: 4px solid rgba(0, 0, 0, 0);
+    border-bottom: 4px solid;
+    
+    display: inline-block;
+    margin-left: 2px;
+    vertical-align: middle;
+}
+    </style>
+    
+    <body>
+        <div class="container">
+            <div class="row">
+                <nav class="navbar navbar-default" role="navigation">
+          
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+        
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="/NouveauMatch/">Nouveau Match</a></li>
+                <!-- <li><a href="/FeedbackJeux/">Jeux</a></li> -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jeux<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/FeedbackJeux/">Attente</a></li>
+                      <li><a href="/HistoriqueJeu/">Historique</a></li>
+                    </ul>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Equipes <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <!-- <li><a href="/Equipes/ListesEquipes/">Listes des equipes</a></li> -->
+                    <!-- <li><a href="#">Saison</a></li> -->
+                    <li><a href="/Equipes/JoueursCree/">Statistique Joueur</a></li>
+                    <li><a href="/Equipes/StatGliss/">Statistique Equipes</a></li>
+                    <li><a href="/Equipes/Assiduite/">Assiduite</a></li>
+                    <li><a href="/Equipes/Joueur1/">Statistique Joueur R</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Params<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/Equipes/ListesEquipes/">Choix de l'équipe</a></li>
+                      <li><a href="/Equipes/ParamEquipe/">Parametre Equipe</a></li>
+                      <!-- <li><a href="#">Etat de forme</a></li> -->
+                      <!-- <li><a href="/StatistiqueGame/">En fonction de "Jeux"</a></li> -->
+                      <!-- <li><a href="#">Assiduité</a></li> -->
+                    </ul>
+                  </li>
+              </ul>
+              
+            </div><!-- /.navbar-collapse -->
+          
+            </nav>
+        
+        </div>
+
+<div class="container">
+    <h2>{{firstName}} {{lastName}} </h2>
+ 
+    {% if user.is_authenticated %}
+    
+    {% else %}
+        <p>Vous n'etes pas connécté</p>
+    {% endif %}
+</div>
+
+
+<div class="container">
+    <form method='POST'>
+        {% csrf_token %}
+        Age : {{age}} ans
+        <input style="opacity:0;width:0;height:0;"autocomplete="off" id="searchInput" name="firstName_lastName" value="{{firstName}} {{lastName}}" type="search"><br>
+        <input type="number" name="heigth" {% if height == '' %} placeholder="Taille" {% else %} value="{{heigth}}" {% endif %}> cm<br>
+        <input type="number" name="VMA" {% if VMA == '' %} placeholder="VMA" {% else %} value="{{VMA}}" {% endif %}>VMA<br>
+        <input type="number" name="weight" {% if weight == '' %} placeholder="Poids" {% else %} value="{{weight}}" {% endif %}>  Kg<br>
+        <select name="placeOnField" >
+            <option value="{{placeOnField}}">{{placeOnField}}</option>
+            <option value="Gardien">Gardien</option>
+            <option value="Milieu">Milieu</option>
+            <option value="Defenseur">Defenseur</option>
+            <option value="Attaquant">Attaquant</option>
+        </select><br>
+        <input type="textarea" name="Remarques" {% if Remarques == '' %} placeholder="Remarques" {% else %} value="{{Remarques}}" {% endif %}><br>
+        <input type='submit' name="statPlayerModif" class="btn btn-success" value="MODIFIER">
+    </form>
+    <br><br>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">score général de <b>{{firstName}}  {{lastName}}</b> : {{score}} </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><b>Gardien</b></td>
+                <td><b>Touché Balle</b></td>
+                <td><b>But</b></td>
+                <td><b>Terrain</b></td>
+                <td><b>Hors-Jeu</b></td>
+            </tr>
+            <tr>
+                <td>Oui :{{scoreGoalKeeperYes}} </td>
+                <td>1_3 libre :{{scoreTB1_3}}</td>
+                <td>scoreGoalSmall : {{scoreGoalSmall}} </td>
+                <td>Herbe Mouillé : {{scoreGrassWet}} </td>
+                <td>Oui : {{scoreOffLineYes}} </td>
+            </tr> 
+            <tr>
+                <td>Non : {{scoreGoalKeeperYes}} </td>
+                <td>TB_2 : {{scoreTB_2}} </td>
+                <td>GoalNone :{{scoreGoalNone}} </td>
+                <td>Herbe Sec : {{scoreGrassDry}} </td>
+                <td>Non : {{scoreOffLineNo}} </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>GoalEmbut :{{scoreGoalEmbut}} </td>
+                <td>Goal7 :{{scoreGoal7}} </td>
+                <td>Stabilise Sec : {{scoreStabiliseDry}} </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>TB_free : {{scoreTB_free}} </td>
+                <td>Goal11 :{{scoreGoal11}} </td>
+                <td>Stabilise Mouillé : {{scoreStabiliseWet}} </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>scoreGoalautreOther :{{scoreGoalOther}} </td>
+                <td>Autre : {{scoreOtherField}} </td>
+                <td></td>
+            </tr>
+           
+        </tbody>
+    </table>
+
+    <button id="displayDetailsButton" class="displayDetailsButton">Afficher Détails</button>
+    <div id="displayDetails" style="width:0;height:0;opacity:0;overflow:auto;">
+    {% for rank,number,idGame,idGameModel in zipRankingNumberIdgameIdgamemodel %}
+        <div style="border : 1px solid black"> Classement : {{rank}} <br> Nb d'equipes : {{number}}. <br>Caractéristiques:{{idGameModel}}</div><br>
+    {% endfor %}
+    </div>           
+        
+    </div>
+    <img src="data:image/png;base64, {{chartPie|safe}}"><br>
+    
+    <img src="data:image/png;base64, {{graphRank|safe}}">
+</body>
+<script>
+
+
+$(function(){
+$(".dropdown").hover(            
+        function() {
+            $('.dropdown-menu', this).stop( true, true ).fadeIn("fast");
+            $(this).toggleClass('open');
+            $('b', this).toggleClass("caret caret-up");                
+        },
+        function() {
+            $('.dropdown-menu', this).stop( true, true ).fadeOut("fast");
+            $(this).toggleClass('open');
+            $('b', this).toggleClass("caret caret-up");                
+        });
+});
+const a = document.querySelector(".displayDetailsButton");
+
+a.addEventListener('click',DisplayDetails);    
+
+function DisplayDetails(){
+    if(document.querySelector("#displayDetails").style.width != "0px"){
+        document.querySelector("#displayDetails").style.width=0;
+        document.querySelector("#displayDetails").style.height=0;
+        document.querySelector("#displayDetails").style.opacity=0;
+      }
+      else{
+        document.querySelector("#displayDetails").style.width="60%";
+        document.querySelector("#displayDetails").style.height="100px";
+        document.querySelector("#displayDetails").style.opacity=1;
+    
+      }
+    }
+    </script>
+</html>
